@@ -1,6 +1,7 @@
 repositories {
     google()
     mavenCentral()
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
 }
 
 plugins {
@@ -13,8 +14,17 @@ kotlin {
     androidTarget()
     jvm("desktop")
     sourceSets {
+        create("sharedMain") {
+            kotlin.srcDirs("src/main/kotlin")
+            dependencies {
+                implementation(compose.foundation)
+                implementation("com.github.kepocnhh:Logics:0.1.3-SNAPSHOT")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+            }
+        }
         getByName("androidMain") {
-            kotlin.srcDirs("src/main/kotlin", "src/android/main/kotlin")
+            dependsOn(getByName("sharedMain"))
+            kotlin.srcDirs("src/android/main/kotlin")
             dependencies {
                 implementation(compose.foundation)
                 implementation("androidx.appcompat:appcompat:1.7.0")
@@ -27,12 +37,14 @@ kotlin {
             kotlin.srcDirs("src/android/watch/kotlin")
         }
         getByName("desktopMain") {
-            kotlin.srcDirs("src/main/kotlin", "src/desktop/kotlin")
+            dependsOn(getByName("sharedMain"))
+            kotlin.srcDirs("src/desktop/kotlin")
             dependencies {
                 implementation(compose.desktop.currentOs)
             }
         }
     }
+    task("testClasses") // https://stackoverflow.com/a/78159011/4398606
 }
 
 android {
@@ -56,6 +68,9 @@ android {
             isMinifyEnabled = false
             isShrinkResources = false
             manifestPlaceholders["appName"] = "${rootProject.name} $name"
+        }
+        getByName("release") {
+            manifestPlaceholders["appName"] = rootProject.name
         }
     }
 
