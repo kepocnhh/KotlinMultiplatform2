@@ -23,14 +23,60 @@ internal class FooLogics(
 
     fun requestState() = launch {
         val items = withContext(injection.contexts.default) {
-//            injection.locals.foo // todo
-            (1..40).map { number ->
-                Foo(
-                    id = UUID.randomUUID(),
-                    created = System.currentTimeMillis().milliseconds - 1.hours + number.minutes,
-                    text = "text/number/$number"
-                )
+            injection.locals.foo
+        }
+        _state.value = State(items = items)
+    }
+
+    fun add() = launch {
+        withContext(injection.contexts.default) {
+            val value = Foo(
+                id = UUID.randomUUID(),
+                created = System.currentTimeMillis().milliseconds,
+                text = "foo:" + System.nanoTime() % 1024,
+            )
+            val items = injection.locals.foo + value
+            injection.locals.foo = items.sortedBy { it.created }
+        }
+        val items = withContext(injection.contexts.default) {
+            injection.locals.foo
+        }
+        _state.value = State(items = items)
+    }
+
+    fun delete(id: UUID) = launch {
+        withContext(injection.contexts.default) {
+            val items = injection.locals.foo.toMutableList()
+            for (i in items.indices) {
+                val item = items[i]
+                if (item.id == id) {
+                    items.removeAt(i)
+                    break
+                }
             }
+            injection.locals.foo = items
+        }
+        val items = withContext(injection.contexts.default) {
+            injection.locals.foo
+        }
+        _state.value = State(items = items)
+    }
+
+    fun update(id: UUID) = launch {
+        withContext(injection.contexts.default) {
+            val items = injection.locals.foo.toMutableList()
+            for (i in items.indices) {
+                val item = items[i]
+                if (item.id == id) {
+                    items.removeAt(i)
+                    items += item.copy(text = "foo:" + System.nanoTime() % 1024)
+                    break
+                }
+            }
+            injection.locals.foo = items.sortedBy { it.created }
+        }
+        val items = withContext(injection.contexts.default) {
+            injection.locals.foo
         }
         _state.value = State(items = items)
     }

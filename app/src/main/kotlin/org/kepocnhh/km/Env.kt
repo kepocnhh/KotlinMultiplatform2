@@ -32,23 +32,9 @@ internal object Env {
 
     val injection: Injection get() = checkNotNull(_injection) { "No injection!" }
 
-    private class MockLocals : Locals {
-        override var foo: List<Foo> = emptyList()
-    }
-
-    private fun onCreate() {
-        _injection = Injection(
-            contexts = Contexts(
-                main = Dispatchers.Main,
-                default = Dispatchers.Default,
-            ),
-            locals = MockLocals(),
-        )
-    }
-
-    fun create() {
+    fun create(injection: Injection) {
         if (!_created.compareAndSet(false, true)) TODO()
-        onCreate()
+        _injection = injection
     }
 
     @Composable
