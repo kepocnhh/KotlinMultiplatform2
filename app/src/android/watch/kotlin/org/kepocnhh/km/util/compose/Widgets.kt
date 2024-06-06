@@ -22,7 +22,7 @@ internal fun LazyColumn(
     state: ScalingLazyListState = rememberScalingLazyListState(0, 0),
     contentPadding: PaddingValues = PaddingValues(),
     autoCentering: AutoCenteringParams = AutoCenteringParams(0, 0),
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(8.dp),
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(0.dp),
     content: ScalingLazyListScope.() -> Unit,
 ) {
     ScalingLazyColumn(
