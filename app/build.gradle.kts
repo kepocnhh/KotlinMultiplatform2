@@ -44,6 +44,7 @@ kotlin {
             kotlin.srcDirs("src/desktop/kotlin")
             dependencies {
                 implementation(compose.desktop.currentOs)
+                runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.8.1")
             }
         }
     }
