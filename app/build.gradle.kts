@@ -12,11 +12,15 @@ plugins {
 kotlin {
     jvm()
     androidTarget()
+    jvm("desktop") {
+        attributes.attribute(Attribute.of(this::class.java.name, String::class.java), name)
+    }
     sourceSets {
-        getByName("jvmMain") {
+        create("sharedMain") {
             kotlin.srcDirs("src/main/kotlin")
         }
         getByName("androidMain") {
+            dependsOn(getByName("sharedMain"))
             kotlin.srcDirs("src/android/main/kotlin")
             dependencies {
                 implementation(compose.foundation)
@@ -29,7 +33,15 @@ kotlin {
         create("androidWatch") {
             kotlin.srcDirs("src/android/watch/kotlin")
         }
+        getByName("desktopMain") {
+            dependsOn(getByName("sharedMain"))
+            kotlin.srcDirs("src/desktop/kotlin")
+            dependencies {
+                implementation(compose.desktop.currentOs)
+            }
+        }
     }
+    task("testClasses") // https://stackoverflow.com/a/78159011/4398606
 }
 
 android {
@@ -104,4 +116,12 @@ androidComponents.onVariants { variant ->
         variant.buildType!!,
         android.defaultConfig.versionCode!!.toString(),
     ).joinToString(separator = "-", postfix = ".apk")
+}
+
+compose.desktop {
+    application {
+        from(kotlin.targets["desktop"])
+        mainClass = "org.kepocnhh.km.AppKt" // todo
+        nativeDistributions.packageName = rootProject.name
+    }
 }

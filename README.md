@@ -8,5 +8,6 @@ Kotlin multiplatform sample https://kotlinlang.org/docs/multiplatform.html
 - [imageviewer](https://github.com/JetBrains/compose-multiplatform/tree/master/examples/imageviewer)
 - [xfiles-cli](https://github.com/kepocnhh/xfiles-cli)
 - [KotlinMultiplatformSample](https://github.com/kepocnhh/KotlinMultiplatformSample)
+- [NYTimes-KMP](https://github.com/xxfast/NYTimes-KMP)
 
 ---
