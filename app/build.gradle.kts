@@ -35,6 +35,9 @@ kotlin {
         }
         create("androidWatch") {
             kotlin.srcDirs("src/android/watch/kotlin")
+            dependencies {
+                implementation("androidx.wear.compose:compose-foundation:1.3.1")
+            }
         }
         getByName("desktopMain") {
             dependsOn(getByName("sharedMain"))
