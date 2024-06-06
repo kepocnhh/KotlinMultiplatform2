@@ -56,35 +56,33 @@ android {
         }
     }
 
+    sourceSets.getByName("main") {
+        kotlin.srcDirs("src/android/$name/kotlin")
+        res.srcDirs("src/android/$name/res")
+        manifest.srcFile("src/android/$name/AndroidManifest.xml")
+    }
+
     productFlavors {
         "device".also { dimension ->
             flavorDimensions += dimension
             create("phone") {
                 this.dimension = dimension
+                sourceSets.getByName(name) {
+                    kotlin.srcDirs("src/android/$name/kotlin")
+                    res.srcDirs("src/android/$name/res")
+                    manifest.srcFile("src/android/$name/AndroidManifest.xml")
+                }
             }
             create("watch") {
                 this.dimension = dimension
                 applicationIdSuffix = ".$name"
                 versionNameSuffix = ".$name"
+                sourceSets.getByName(name) {
+                    kotlin.srcDirs("src/android/$name/kotlin")
+                    res.srcDirs("src/android/$name/res")
+                    manifest.srcFile("src/android/$name/AndroidManifest.xml")
+                }
             }
-        }
-    }
-
-    sourceSets {
-        getByName("main") {
-            kotlin.srcDirs("src/android/$name/kotlin")
-            res.srcDirs("src/android/$name/res")
-            manifest.srcFile("src/android/$name/AndroidManifest.xml")
-        }
-        getByName("phone") {
-            kotlin.srcDirs("src/android/$name/kotlin")
-            res.srcDirs("src/android/$name/res")
-            manifest.srcFile("src/android/$name/AndroidManifest.xml")
-        }
-        getByName("watch") {
-            kotlin.srcDirs("src/android/$name/kotlin")
-            res.srcDirs("src/android/$name/res")
-            manifest.srcFile("src/android/$name/AndroidManifest.xml")
         }
     }
 
