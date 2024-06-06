@@ -10,14 +10,24 @@ plugins {
 }
 
 kotlin {
+    jvm()
     androidTarget()
     sourceSets {
+        getByName("jvmMain") {
+            kotlin.srcDirs("src/main/kotlin")
+        }
         getByName("androidMain") {
             kotlin.srcDirs("src/android/main/kotlin")
             dependencies {
                 implementation(compose.foundation)
                 implementation("androidx.appcompat:appcompat:1.7.0")
             }
+        }
+        create("androidPhone") {
+            kotlin.srcDirs("src/android/phone/kotlin")
+        }
+        create("androidWatch") {
+            kotlin.srcDirs("src/android/watch/kotlin")
         }
     }
 }
@@ -35,13 +45,6 @@ android {
     }
 
     compileOptions.targetCompatibility = JavaVersion.toVersion(Version.jvmTarget)
-
-    sourceSets {
-        getByName("main") {
-            res.srcDirs("src/android/$name/res")
-            manifest.srcFile("src/android/$name/AndroidManifest.xml")
-        }
-    }
 
     buildTypes {
         getByName("debug") {
@@ -64,6 +67,24 @@ android {
                 applicationIdSuffix = ".$name"
                 versionNameSuffix = ".$name"
             }
+        }
+    }
+
+    sourceSets {
+        getByName("main") {
+            kotlin.srcDirs("src/android/$name/kotlin")
+            res.srcDirs("src/android/$name/res")
+            manifest.srcFile("src/android/$name/AndroidManifest.xml")
+        }
+        getByName("phone") {
+            kotlin.srcDirs("src/android/$name/kotlin")
+            res.srcDirs("src/android/$name/res")
+            manifest.srcFile("src/android/$name/AndroidManifest.xml")
+        }
+        getByName("watch") {
+            kotlin.srcDirs("src/android/$name/kotlin")
+            res.srcDirs("src/android/$name/res")
+            manifest.srcFile("src/android/$name/AndroidManifest.xml")
         }
     }
 
